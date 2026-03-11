@@ -42,7 +42,7 @@ public class Manager {
         double EmployeesExpenses=0;
 
         for(Employee e : employees){
-            EmployeesExpenses = e.getSalary();
+            EmployeesExpenses += e.getSalary();
         }
         double maintenance = 3500.99;
         return EmployeesExpenses+maintenance;
@@ -70,4 +70,5 @@ public class Manager {
     public void AddEmployee(String name, int phone, int age, int id, double salary) {
         employees.add(new Employee(name, phone, age, id, salary));
     }
+
 }
