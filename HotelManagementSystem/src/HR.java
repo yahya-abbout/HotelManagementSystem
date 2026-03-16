@@ -45,7 +45,4 @@ public class HR {
         }
         System.out.println("Total salaries is: " + total);
     }
-
-
-
 }
