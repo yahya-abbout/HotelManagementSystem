@@ -12,10 +12,10 @@ public class HR {
 
     public HR() {}
 
-    // BUG FIX: Method body was floating outside any method. Wrapped in correct signature.
+    
     public void AddEmployee(String name, int phone, int age, int id, double salary) {
 
-        // BUG FIX: 'if' block was outside any method — now correctly inside AddEmployee()
+        
         if (employees.containsKey(id)) {
             System.out.println("Error: ID " + id + " already exists!");
             return;
@@ -27,10 +27,10 @@ public class HR {
         System.out.println("Employee added successfully.");
     }
 
-    // BUG FIX: Method body was floating outside any method. Wrapped in correct signature.
+    .
     public void DeleteEmployee(int id) {
 
-        // BUG FIX: 'if' block was outside any method — now correctly inside DeleteEmployee()
+        
         if (employees.containsKey(id)) {
             Employee removed = employees.get(id);
             employees.remove(id);
@@ -42,10 +42,10 @@ public class HR {
         }
     }
 
-    // BUG FIX: Method body was floating outside any method. Wrapped in correct signature.
+   
     public void editEmployee(int id, String newName, double newSalary) {
 
-        // BUG FIX: Logic block was outside any method — now correctly inside editEmployee()
+       
         Employee e = employees.get(id);
         if (e != null) {
             double oldSalary = e.getSalary();
