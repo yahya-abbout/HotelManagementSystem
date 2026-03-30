@@ -1,17 +1,19 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 
 public class HotelManagementSystem {
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
 
-        // FIXED: moved outside loop so data is shared
-        ArrayList<Customer> customers = new ArrayList<>();
-        ArrayList<Employee> employees = new ArrayList<>();
 
         System.out.println("***Welcome to Hotel Abbot***");
+
+        Admin admin = new Admin();
+        HR hr = new HR();
+
 
         while(true){
 
@@ -28,10 +30,7 @@ public class HotelManagementSystem {
 
                 switch (choice){
 
-                    // ================= ADMIN =================
                     case 1:
-
-                        Admin admin = new Admin(customers);
 
                         System.out.println("**Administrator account**\n");
 
@@ -84,7 +83,7 @@ public class HotelManagementSystem {
                                         int deleteId = scanner.nextInt();
                                         scanner.nextLine();
 
-                                        admin.DeleteCostumer("", "", deleteId, 0, 0);
+                                        admin.DeleteCostumer(deleteId);
                                         break;
 
                                     default:
@@ -97,11 +96,9 @@ public class HotelManagementSystem {
                         }
                         break;
 
-                    // ================= MANAGER =================
                     case 2:
 
-                        Manager manager = new Manager(customers, employees);
-                        HR hrFromManager = new HR(employees);
+                        Manager manager = new Manager(admin.customers, hr.employees);
 
                         System.out.println("**Manager account**\n");
 
@@ -165,7 +162,7 @@ public class HotelManagementSystem {
                                         double eSalary = scanner.nextDouble();
                                         scanner.nextLine();
 
-                                        hrFromManager.AddEmployee(eName, ePhone, eAge, eId, eSalary);
+                                        hr.AddEmployee(eName, ePhone, eAge, eId, eSalary);
                                         break;
 
                                     default:
@@ -178,10 +175,8 @@ public class HotelManagementSystem {
                         }
                         break;
 
-                    // ================= HR =================
                     case 3:
 
-                        HR hr = new HR(employees);
 
                         System.out.print("Enter your name: ");
                         String hrName = scanner.nextLine();
