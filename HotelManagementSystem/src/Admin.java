@@ -1,10 +1,4 @@
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.LinkedList;
-
-
-public class Admin {
+{
 
     HashMap<Integer, Customer> customers = new HashMap<>();
     HashSet<Integer> usedIds = new HashSet<>();
@@ -14,10 +8,8 @@ public class Admin {
     public Admin() {
     }
 
-    
     public void AddCostumer(String name, String LastName, int id, int plan, double TotalPrice) {
 
-        
         if (usedIds.contains(id)) {
             System.out.println("Error: Customer ID " + id + " already exists!");
             return;
@@ -27,17 +19,39 @@ public class Admin {
         customers.put(id, newCustomer);
         usedIds.add(id);
         newCustomer.addBooking("Plan " + plan + " - $" + TotalPrice);
-        System.out.println("Customer added successfully.");
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String query = "INSERT INTO customers (first_name, last_name, id, plan, total_price) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, name);
+            stmt.setString(2, LastName);
+            stmt.setInt(3, id);
+            stmt.setInt(4, plan);
+            stmt.setDouble(5, TotalPrice);
+            stmt.executeUpdate();
+            System.out.println("Customer added successfully.");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
     }
 
-  
     public void DeleteCostumer(int id) {
 
-        
         if (customers.containsKey(id)) {
             customers.remove(id);
             usedIds.remove(id);
-            System.out.println("Customer deleted.");
+
+            try {
+                Connection conn = DatabaseConnection.getConnection();
+                String query = "DELETE FROM customers WHERE id = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                System.out.println("Customer deleted.");
+            } catch (SQLException e) {
+                System.out.println("Database error: " + e.getMessage());
+            }
         } else {
             System.out.println("Customer not found.");
         }
