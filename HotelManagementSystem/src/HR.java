@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Stack;
@@ -12,10 +15,8 @@ public class HR {
 
     public HR() {}
 
-    
     public void AddEmployee(String name, int phone, int age, int id, double salary) {
 
-        
         if (employees.containsKey(id)) {
             System.out.println("Error: ID " + id + " already exists!");
             return;
@@ -24,28 +25,49 @@ public class HR {
         employees.put(id, newEmployee);
         salaryRanking.put(salary, newEmployee);
         hrActionLog.push("ADDED: " + name + " | ID: " + id + " | Salary: " + salary);
-        System.out.println("Employee added successfully.");
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String query = "INSERT INTO employees (first_name, phone, age, id, salary, department) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, name);
+            stmt.setInt(2, phone);
+            stmt.setInt(3, age);
+            stmt.setInt(4, id);
+            stmt.setDouble(5, salary);
+            stmt.setString(6, newEmployee.getDepartment());
+            stmt.executeUpdate();
+            System.out.println("Employee added successfully.");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
     }
 
-    .
     public void DeleteEmployee(int id) {
 
-        
         if (employees.containsKey(id)) {
             Employee removed = employees.get(id);
             employees.remove(id);
             salaryRanking.remove(removed.getSalary());
             hrActionLog.push("DELETED: " + removed.name + " ID: " + id);
-            System.out.println("Employee removed.");
+
+            try {
+                Connection conn = DatabaseConnection.getConnection();
+                String query = "DELETE FROM employees WHERE id = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                System.out.println("Employee removed.");
+            } catch (SQLException e) {
+                System.out.println("Database error: " + e.getMessage());
+            }
         } else {
             System.out.println("Employee not found.");
         }
     }
 
-   
     public void editEmployee(int id, String newName, double newSalary) {
 
-       
         Employee e = employees.get(id);
         if (e != null) {
             double oldSalary = e.getSalary();
@@ -54,7 +76,19 @@ public class HR {
             salaryRanking.remove(oldSalary);
             salaryRanking.put(newSalary, e);
             hrActionLog.push("EDITED: ID " + id + " | New name: " + newName + " | New salary: " + newSalary);
-            System.out.println("Employee updated.");
+
+            try {
+                Connection conn = DatabaseConnection.getConnection();
+                String query = "UPDATE employees SET first_name = ?, salary = ? WHERE id = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, newName);
+                stmt.setDouble(2, newSalary);
+                stmt.setInt(3, id);
+                stmt.executeUpdate();
+                System.out.println("Employee updated.");
+            } catch (SQLException ex) {
+                System.out.println("Database error: " + ex.getMessage());
+            }
         } else {
             System.out.println("Employee not found.");
         }
