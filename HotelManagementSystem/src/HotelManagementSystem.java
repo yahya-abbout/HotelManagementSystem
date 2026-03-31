@@ -1,9 +1,4 @@
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
-
-public class HotelManagementSystem {
+{
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
