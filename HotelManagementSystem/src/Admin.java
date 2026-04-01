@@ -1,4 +1,13 @@
-{
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.LinkedList;
+
+
+public class Admin {
 
     HashMap<Integer, Customer> customers = new HashMap<>();
     HashSet<Integer> usedIds = new HashSet<>();
