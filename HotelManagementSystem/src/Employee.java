@@ -8,6 +8,7 @@ public class Employee {
     private int id;
     private double salary;
     private String department;
+    String role;
 
     private Stack<String> activityLog = new Stack<>();
 
@@ -18,6 +19,7 @@ public class Employee {
         this.id = id;
         this.salary = salary;
         this.department = null;
+        // department updates in another method.
     }
 
     public int getPhone() {
