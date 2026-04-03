@@ -1,3 +1,4 @@
+import javax.xml.namespace.QName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -112,7 +113,7 @@ public class HR {
             return;
         }
         Employee top = salaryRanking.lastEntry().getValue();
-        System.out.println("Highest paid: " + top.name + " | Salary: $" + salaryRanking.lastKey());
+        System.out.println("Highest paid: " + top.name + "/ Salary: " + salaryRanking.lastKey() + "$");
     }
 
     public void showLastAction() {
@@ -128,9 +129,18 @@ public class HR {
             System.out.println("No actions recorded.");
             return;
         }
-        System.out.println("--- HR Action Log ---");
+        System.out.println("*** HR Action Log ***");
         for (int i = hrActionLog.size() - 1; i >= 0; i--) {
             System.out.println(hrActionLog.get(i));
         }
+    }
+// This method Used in logging admins.
+    public boolean loginEmployee(String Name, int id){
+        for (Employee e : employees.values()){
+            if (e.name.equals(Name) && e.getId2()==id){
+                return true;
+            }
+        }
+        return false;
     }
 }
