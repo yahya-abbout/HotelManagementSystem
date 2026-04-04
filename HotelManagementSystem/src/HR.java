@@ -124,16 +124,7 @@ public class HR {
         }
     }
 
-    public void showAllActions() {
-        if (hrActionLog.isEmpty()) {
-            System.out.println("No actions recorded.");
-            return;
-        }
-        System.out.println("*** HR Action Log ***");
-        for (int i = hrActionLog.size() - 1; i >= 0; i--) {
-            System.out.println(hrActionLog.get(i));
-        }
-    }
+   
 // This method Used in logging admins.
     public boolean loginEmployee(String Name, int id){
         for (Employee e : employees.values()){
