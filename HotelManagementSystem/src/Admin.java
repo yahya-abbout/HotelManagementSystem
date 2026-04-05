@@ -1,13 +1,4 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.LinkedList;
-
-
-public class Admin {
+{
 
     HashMap<Integer, Customer> customers = new HashMap<>();
     HashSet<Integer> usedIds = new HashSet<>();
@@ -19,6 +10,14 @@ public class Admin {
 
     public void AddCostumer(String name, String LastName, int id, int plan, double TotalPrice) {
 
+        Customer NewCustomer = new Customer(name, LastName, id, plan, TotalPrice);
+
+      if(customers.size()>=12) {
+          System.out.println("Hotel is fully booked. Adding to waiting list..");
+          addToWaitingList(NewCustomer);
+          return;
+      }
+
         if (usedIds.contains(id)) {
             System.out.println("Error: Customer ID " + id + " already exists!");
             return;
@@ -27,7 +26,7 @@ public class Admin {
         Customer newCustomer = new Customer(name, LastName, id, plan, TotalPrice);
         customers.put(id, newCustomer);
         usedIds.add(id);
-        newCustomer.addBooking("Plan " + plan + " - $" + TotalPrice);
+        newCustomer.addBooking("Plan " + plan + " : $" + TotalPrice);
 
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -81,5 +80,11 @@ public class Admin {
         }
     }
 
-    public void loginAdmin(String name, int id) {}
+    public void showWaitingList(){
+        if (waitingList!=null){
+            for (Customer c : waitingList){
+                System.out.println(c.name);
+            }
+        }
+    }
 }
