@@ -36,18 +36,19 @@
                         int adminId = scanner.nextInt();
                         scanner.nextLine();
 
-                        if(adminName.equals("admin") && adminId == 1234){
+                        if(hr.loginEmployee(adminName, adminId)){
 
                             while(true){
 
                                 System.out.println("\n1.Add Customer");
                                 System.out.println("2.Delete Customer");
-                                System.out.println("3.Back");
+                                System.out.println("3.show Waiting List");
+                                System.out.println("4.Back");
 
                                 int adminChoice = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(adminChoice == 3) break;
+                                if(adminChoice == 4) break;
 
                                 switch(adminChoice){
 
@@ -80,6 +81,9 @@
 
                                         admin.DeleteCostumer(deleteId);
                                         break;
+
+                                    case 3:
+                                        admin.showWaitingList();
 
                                     default:
                                         System.out.println("enter valid choice");
@@ -115,12 +119,13 @@
                                 System.out.println("2.Get Total Expenses");
                                 System.out.println("3.Show Month Summary");
                                 System.out.println("4.Add Employee");
-                                System.out.println("5.Exit");
+                                System.out.println("5.Show Revenue History");
+                                System.out.println("6.Exit");
 
                                 int choice2 = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(choice2 == 5) break;
+                                if(choice2 == 6) break;
 
                                 switch(choice2){
 
@@ -160,6 +165,10 @@
                                         hr.AddEmployee(eName, ePhone, eAge, eId, eSalary);
                                         break;
 
+                                    case 5:
+                                        manager.showRevenueHistory();
+                                        break;
+
                                     default:
                                         System.out.println("enter valid choice");
                                 }
@@ -189,12 +198,14 @@
                                 System.out.println("3.Remove employees");
                                 System.out.println("4.View total salaries");
                                 System.out.println("5.Track number of employees");
-                                System.out.println("6.Exit");
+                                System.out.println("6.show All Actions Made by HR");
+                                System.out.println("7.Show Last actions");
+                                System.out.println("8.Exit");
 
                                 int choice3 = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(choice3 == 6) break;
+                                if(choice3 == 8) break;
 
                                 switch(choice3){
 
@@ -254,6 +265,13 @@
                                     case 5:
                                         hr.countEmployees();
                                         break;
+
+                                    case 6:
+                                        hr.showAllActions();
+                                        break;
+
+                                    case 7:
+                                        hr.showLastAction();
 
                                     default:
                                         System.out.println("enter valid choice");
