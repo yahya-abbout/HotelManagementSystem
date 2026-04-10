@@ -8,6 +8,7 @@ public class Employee {
     private int id;
     private double salary;
     private String department;
+    String role;
     
 
     private Stack<String> activityLog = new Stack<>();
