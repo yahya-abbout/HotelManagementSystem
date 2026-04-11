@@ -1,4 +1,13 @@
-{
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.LinkedList;
+
+
+public class Admin {
 
     HashMap<Integer, Customer> customers = new HashMap<>();
     HashSet<Integer> usedIds = new HashSet<>();
@@ -8,35 +17,35 @@
     public Admin() {
     }
 
-    public void AddCostumer(String name, String LastName, int id, int plan, double TotalPrice) {
+    public void AddCostumer(String name, String LastName, int id, double TotalPrice) {
 
-        Customer NewCustomer = new Customer(name, LastName, id, plan, TotalPrice);
+        Customer NewCustomer = new Customer(name, LastName, id, TotalPrice);
 
-      if(customers.size()>=12) {
-          System.out.println("Hotel is fully booked. Adding to waiting list..");
-          addToWaitingList(NewCustomer);
-          return;
-      }
+        if(customers.size()>=12) {
+            System.out.println("Hotel is fully booked. Adding to waiting list..");
+            addToWaitingList(NewCustomer);
+            return;
+        }
 
         if (usedIds.contains(id)) {
             System.out.println("Error: Customer ID " + id + " already exists!");
             return;
         }
 
-        Customer newCustomer = new Customer(name, LastName, id, plan, TotalPrice);
+        Customer newCustomer = new Customer(name, LastName, id, TotalPrice);
         customers.put(id, newCustomer);
         usedIds.add(id);
-        newCustomer.addBooking("Plan " + plan + " : $" + TotalPrice);
+        
 
         try {
             Connection conn = DatabaseConnection.getConnection();
-            String query = "INSERT INTO customers (first_name, last_name, id, plan, total_price) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO customers (first_name, last_name, id, total_price) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, name);
             stmt.setString(2, LastName);
             stmt.setInt(3, id);
-            stmt.setInt(4, plan);
-            stmt.setDouble(5, TotalPrice);
+            
+            stmt.setDouble(4, TotalPrice);
             stmt.executeUpdate();
             System.out.println("Customer added successfully.");
         } catch (SQLException e) {
@@ -74,7 +83,7 @@
         Customer next = waitingList.poll();
         if (next != null) {
             System.out.println("Serving next customer: " + next.name);
-            AddCostumer(next.name, next.getLastName(), next.getId(), next.plan, next.getTotalPrice());
+            AddCostumer(next.name, next.getLastName(), next.getId(), next.getTotalPrice());
         } else {
             System.out.println("Waiting list is empty.");
         }
