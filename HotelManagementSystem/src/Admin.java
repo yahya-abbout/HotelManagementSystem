@@ -67,7 +67,7 @@ public class Admin {
                 stmt.executeUpdate();
                 System.out.println("Customer deleted.");
             } catch (SQLException e) {
-                System.out.println("Database error: " + e.getMessage());
+                System.out.println("Database error : " + e.getMessage());
             }
         } else {
             System.out.println("Customer not found.");
