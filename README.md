@@ -30,7 +30,7 @@ HotelAbbot/
 ├── Admin.java                  ← customer check-in/out + waiting list
 ├── HR.java                     ← employee management + action log
 ├── Manager.java                ← revenue & expense reporting
-├── RPDAO.java                  ← DAO for rooms & plans
+├── RPDAO.java                  ← DAO for rooms & plans(data acces object)
 ├── Customer / Employee / Plan / Room .java  ← models
 ├── DatabaseConnection.java     ← MySQL connection
 └── hotel_abbot.sql             ← full DB setup script
