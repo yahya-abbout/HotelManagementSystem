@@ -7,7 +7,7 @@ public class Customer {
     private int id;
     int plan;
     private double TotalPrice;
-    String nationality;
+    
 
     private List<String> bookingHistory = new ArrayList<>();
 
