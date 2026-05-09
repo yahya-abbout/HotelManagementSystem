@@ -35,7 +35,7 @@ public class Admin {
         Customer newCustomer = new Customer(name, LastName, id, TotalPrice);
         customers.put(id, newCustomer);
         usedIds.add(id);
-        
+
 
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -44,7 +44,7 @@ public class Admin {
             stmt.setString(1, name);
             stmt.setString(2, LastName);
             stmt.setInt(3, id);
-            
+
             stmt.setDouble(4, TotalPrice);
             stmt.executeUpdate();
             System.out.println("Customer added successfully.");
@@ -53,7 +53,7 @@ public class Admin {
         }
     }
 
-    public void DeleteCostumer(int id) {
+    public void CheckOutCostumer(int id) {
 
         if (customers.containsKey(id)) {
             customers.remove(id);
@@ -67,7 +67,7 @@ public class Admin {
                 stmt.executeUpdate();
                 System.out.println("Customer deleted.");
             } catch (SQLException e) {
-                System.out.println("Database error : " + e.getMessage());
+                System.out.println("Database error: " + e.getMessage());
             }
         } else {
             System.out.println("Customer not found.");

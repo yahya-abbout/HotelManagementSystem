@@ -3,7 +3,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-
 public class Manager {
 
     HashMap<Integer, Customer> customers;
@@ -67,7 +66,7 @@ public class Manager {
         } else {
             System.out.println("Head to Head");
         }
-        
+
         String result = MonthSummary > 0 ? "Profit" : MonthSummary < 0 ? "Loss" : "Break Even";
         monthlyRevenueHistory.put("Summary", MonthSummary);
     }
@@ -86,4 +85,5 @@ public class Manager {
             System.out.println(entry.getKey() + ": $" + entry.getValue());
         }
     }
+
 }

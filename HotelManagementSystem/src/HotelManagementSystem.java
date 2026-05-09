@@ -1,31 +1,38 @@
-{
-    public static void main(String[] args){
+import java.sql.SQLException;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
+public class HotelManagementSystem {
+
+
+    public static void main(String[] args) throws SQLException {
 
         Scanner scanner = new Scanner(System.in);
-
 
         System.out.println("***Welcome to Hotel Abbot***");
 
         Admin admin = new Admin();
         HR hr = new HR();
 
-
-        while(true){
+        while (true) {
 
             System.out.println("\n1.Administrator Login");
             System.out.println("2.Manager Login");
             System.out.println("3.HR Login");
             System.out.println("4.Exit");
 
-            try{
+            try {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
-                if(choice == 4) break;
+                if (choice == 4) break;
 
-                switch (choice){
+                switch (choice) {
 
                     case 1:
+
+                        RPDAO rpdao = new RPDAO();
 
                         System.out.println("**Administrator account**\n");
 
@@ -36,21 +43,21 @@
                         int adminId = scanner.nextInt();
                         scanner.nextLine();
 
-                        if(hr.loginEmployee(adminName, adminId)){
+                        if (hr.loginEmployee(adminName, adminId)) {
 
-                            while(true){
+                            while (true) {
 
                                 System.out.println("\n1.Add Customer");
                                 System.out.println("2.Delete Customer");
-                                System.out.println("3.show Waiting List");
+                                System.out.println("3.Show Waiting List");
                                 System.out.println("4.Back");
 
                                 int adminChoice = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(adminChoice == 4) break;
+                                if (adminChoice == 4) break;
 
-                                switch(adminChoice){
+                                switch (adminChoice) {
 
                                     case 1:
 
@@ -62,15 +69,74 @@
 
                                         System.out.print("Enter id: ");
                                         int id = scanner.nextInt();
-
-                                        System.out.print("Enter plan: ");
-                                        int plan = scanner.nextInt();
-
-                                        System.out.print("Enter total price: ");
-                                        double totalPrice = scanner.nextDouble();
                                         scanner.nextLine();
 
-                                        admin.AddCostumer(name, lastName, id, plan, totalPrice);
+
+                                        List<Plan> plans = rpdao.getAllPlans();
+                                        rpdao.printPlans(plans);
+
+                                        System.out.print("Choose a plan ID: ");
+                                        int chosenPlanId = scanner.nextInt();
+                                        scanner.nextLine();
+
+
+                                        Plan chosenPlan = null;
+                                        for (Plan p : plans) {
+                                            if (p.getPlanId() == chosenPlanId) {
+                                                chosenPlan = p;
+                                                break;
+                                            }
+                                        }
+
+
+                                        if (chosenPlan == null) {
+                                            System.out.println("Invalid plan ID. Booking cancelled.");
+                                            break;
+                                        }
+
+
+                                        List<Room> availableRooms = rpdao.getRoomsByPlanId(chosenPlanId);
+                                        availableRooms.removeIf(r -> !r.isAvailable());
+                                        rpdao.printAvailableRooms(availableRooms);
+
+
+                                        if (availableRooms.isEmpty()) {
+                                            System.out.println("No available rooms for this plan. Booking cancelled.");
+                                            break;
+                                        }
+
+                                        System.out.print("Choose a Room ID: ");
+                                        int chosenRoomId = scanner.nextInt();
+                                        scanner.nextLine();
+
+                                        Room chosenRoom = null;
+                                        for (Room r : availableRooms) {
+                                            if (r.getRoomId() == chosenRoomId) {
+                                                chosenRoom = r;
+                                                break;
+                                            }
+                                        }
+
+
+                                        if (chosenRoom == null) {
+                                            System.out.println("Invalid room ID. Booking cancelled.");
+                                            break;
+                                        }
+
+                                        System.out.print("Enter number of nights: ");
+                                        int nights = scanner.nextInt();
+                                        scanner.nextLine();
+
+
+                                        double totalPrice = chosenPlan.getPricePerNight() * nights;
+                                        System.out.println("Total price for " + nights + " night(s): $" + totalPrice);
+
+
+                                        admin.AddCostumer(name, lastName, id, totalPrice);
+
+
+                                        rpdao.updateAvailability(chosenRoomId, false);
+                                        System.out.println("Room " + chosenRoom.getRoomNumber() + " has been booked successfully.");
                                         break;
 
                                     case 2:
@@ -79,18 +145,18 @@
                                         int deleteId = scanner.nextInt();
                                         scanner.nextLine();
 
-                                        admin.DeleteCostumer(deleteId);
+                                        admin.CheckOutCostumer(deleteId);
                                         break;
 
                                     case 3:
                                         admin.showWaitingList();
+                                        break;
 
                                     default:
-                                        System.out.println("enter valid choice");
+                                        System.out.println("Enter valid choice");
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             System.out.println("Wrong credentials");
                         }
                         break;
@@ -111,9 +177,9 @@
                         System.out.print("Enter your secret word: ");
                         String secret = scanner.nextLine();
 
-                        if(managerName.equals("Yahya") && managerId == 321 && secret.equals("apple")){
+                        if (managerName.equals("Yahya") && managerId == 321 && secret.equals("apple")) {
 
-                            while(true){
+                            while (true) {
 
                                 System.out.println("\n1.Get Total Revenue");
                                 System.out.println("2.Get Total Expenses");
@@ -125,9 +191,9 @@
                                 int choice2 = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(choice2 == 6) break;
+                                if (choice2 == 6) break;
 
-                                switch(choice2){
+                                switch (choice2) {
 
                                     case 1:
                                         manager.showTotalRevenue();
@@ -170,17 +236,15 @@
                                         break;
 
                                     default:
-                                        System.out.println("enter valid choice");
+                                        System.out.println("Enter valid choice");
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             System.out.println("Wrong credentials");
                         }
                         break;
 
                     case 3:
-
 
                         System.out.print("Enter your name: ");
                         String hrName = scanner.nextLine();
@@ -189,25 +253,25 @@
                         int hrId = scanner.nextInt();
                         scanner.nextLine();
 
-                        if(hrName.equals("ABD") && hrId == 456){
+                        if (hrName.equals("ABD") && hrId == 456) {
 
-                            while(true){
+                            while (true) {
 
                                 System.out.println("\n1.Add new employees");
                                 System.out.println("2.Edit employee details");
                                 System.out.println("3.Remove employees");
                                 System.out.println("4.View total salaries");
                                 System.out.println("5.Track number of employees");
-                                System.out.println("6.show All Actions Made by HR");
+                                System.out.println("6.Show All Actions Made by HR");
                                 System.out.println("7.Show Last actions");
                                 System.out.println("8.Exit");
 
                                 int choice3 = scanner.nextInt();
                                 scanner.nextLine();
 
-                                if(choice3 == 8) break;
+                                if (choice3 == 8) break;
 
-                                switch(choice3){
+                                switch (choice3) {
 
                                     case 1:
 
@@ -272,25 +336,26 @@
 
                                     case 7:
                                         hr.showLastAction();
+                                        break;
 
                                     default:
-                                        System.out.println("enter valid choice");
+                                        System.out.println("Enter valid choice");
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             System.out.println("Wrong credentials");
                         }
                         break;
 
                     default:
-                        System.out.println("enter a valid choice");
+                        System.out.println("Enter a valid choice");
                 }
 
-            }catch(InputMismatchException e){
-                System.out.println("enter a number");
+            } catch (InputMismatchException e) {
+                System.out.println("Enter a number");
                 scanner.nextLine();
             }
+
         }
 
         scanner.close();
