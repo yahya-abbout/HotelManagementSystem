@@ -5,6 +5,7 @@ public class Customer {
     String name;
     private String LastName;
     private int id;
+    private String department;
 
     private double TotalPrice;
 
