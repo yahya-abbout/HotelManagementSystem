@@ -90,7 +90,7 @@ public class HotelManagementSystem {
 
 
                                         if (chosenPlan == null) {
-                                            System.out.println("Invalid plan ID. Booking cancelled.");
+                                            System.out.println("invalid plan ID, Booking cancelled.");
                                             break;
                                         }
 
